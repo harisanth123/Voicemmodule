@@ -6,5 +6,5 @@ urlpatterns = [
     path('addrecipeinfo/',view=views.addRecipeInfo),
     path('getrecipeinstruction/',view=views.getRecipeInstruction),
     path('addrecipeinstruction/',view=views.addRecipeInstruction),
-
+    path('play/',view=views.play),
 ]

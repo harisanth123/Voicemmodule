@@ -1,5 +1,8 @@
+from ast import Lambda
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+
+from services.google import converter
 from .serializers import InstructionSerializer, RecipeSerializer
 from base.models import Recipe
 from base.models import RecipeInstruction
@@ -30,3 +33,18 @@ def addRecipeInstruction(request):
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
+
+@api_view(['GET'])
+def play(request):
+    r_idvalue= request.GET.get('r_id',None)
+    v_data = RecipeInstruction.objects.filter(r_id=r_idvalue)
+    v_data = list(v_data)
+    v_data.sort(key=lambda x: x.seq_no)
+    converter(v_data)
+    serializer = InstructionSerializer(v_data,many = True)
+    return Response(serializer.data)
+
+    
+
+
+
