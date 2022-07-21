@@ -1,7 +1,8 @@
 from ast import Lambda
+from multiprocessing import context
+from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
 from services.google import converter
 from .serializers import InstructionSerializer, RecipeSerializer
 from base.models import Recipe
@@ -40,10 +41,11 @@ def play(request):
     v_data = RecipeInstruction.objects.filter(r_id=r_idvalue)
     v_data = list(v_data)
     v_data.sort(key=lambda x: x.seq_no)
-    converter(v_data)
-    serializer = InstructionSerializer(v_data,many = True)
-    return Response(serializer.data)
-
+    filename=converter(v_data)
+    # serializer = InstructionSerializer(v_data,many = True)
+    # return Response(serializer.data)
+    context={"filepath":"/media/"+filename}
+    return render(request,"index.html",context)
     
 
 
